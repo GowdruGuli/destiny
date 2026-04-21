@@ -1,270 +1,372 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Something between us ❤️</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Something between us ❤️</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-<style>
-body {
-  margin:0;
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:linear-gradient(135deg,#ffd6e7,#ffeef5,#ffd1dc);
-  font-family:-apple-system,sans-serif;
-  text-align:center;
-  overflow:hidden;
-}
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #ffd6e7, #ffeef5, #ffd1dc);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      text-align: center;
+      overflow: hidden;
+      position: relative;
+    }
 
-/* CARD */
-.card {
-  background:rgba(255,255,255,0.88);
-  padding:30px;
-  border-radius:25px;
-  width:90%;
-  max-width:420px;
-  box-shadow:0 20px 50px rgba(0,0,0,0.12);
-  position:relative;
-  z-index:1000;
-}
+    .card {
+      background: rgba(255, 255, 255, 0.88);
+      padding: 30px;
+      border-radius: 25px;
+      width: 90%;
+      max-width: 420px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+      position: relative;
+      z-index: 1000;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
 
-/* BUTTONS */
-.buttons {
-  position:relative;
-  height:180px;
-  z-index:5000;
-}
+    h1 {
+      margin: 0 0 10px;
+      color: #7a2048;
+      font-size: 2rem;
+      line-height: 1.2;
+    }
 
-button {
-  border:none;
-  padding:15px 25px;
-  border-radius:18px;
-  font-weight:bold;
-  cursor:pointer;
-}
+    h2 {
+      margin: 0 0 12px;
+      color: #7a2048;
+      font-size: 1.8rem;
+      line-height: 1.2;
+    }
 
-/* YES */
-.yes {
-  background:#34c759;
-  color:white;
-  position:absolute;
-  left:20%;
-  top:50%;
-  transform:translateY(-50%);
-  z-index:5001;
-}
+    p {
+      margin: 0 0 20px;
+      color: #8f3b60;
+      line-height: 1.55;
+      font-size: 1rem;
+    }
 
-/* NO (ALWAYS TOP) */
-.no {
-  background:#ff4d6d;
-  color:white;
-  position:absolute;
-  left:60%;
-  top:50%;
-  transform:translateY(-50%);
-  max-width:190px;
-  white-space:normal;
-  z-index:9999;
-}
+    .buttons {
+      position: relative;
+      height: 190px;
+      margin-top: 8px;
+      z-index: 5000;
+    }
 
-/* MESSAGE */
-#yesMessage {
-  display:none;
-  position:relative;
-  z-index:1001;
-}
+    button {
+      border: none;
+      padding: 15px 25px;
+      border-radius: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 16px;
+      transition: transform 0.2s ease;
+    }
 
-/* RANDOM PHOTO */
-.popup-photo {
-  position:fixed;
-  width:260px;
-  height:260px;
-  object-fit:cover;
-  border-radius:28px;
-  border:5px solid white;
-  box-shadow:0 18px 50px rgba(0,0,0,0.35);
-  z-index:3000;
-  transform:rotate(-5deg);
-}
+    .yes {
+      background: #34c759;
+      color: white;
+      position: absolute;
+      left: 20%;
+      top: 50%;
+      transform: translateY(-50%) scale(1);
+      box-shadow: 0 10px 25px rgba(52, 199, 89, 0.28);
+      z-index: 5001;
+      white-space: normal;
+      max-width: 180px;
+    }
 
-/* FINAL PHOTOS */
-.final-photo {
-  position:fixed;
-  width:150px;
-  height:150px;
-  object-fit:cover;
-  border-radius:24px;
-  border:4px solid white;
-  box-shadow:0 18px 40px rgba(0,0,0,0.3);
-  z-index:3000;
-}
+    .no {
+      background: #ff4d6d;
+      color: white;
+      position: absolute;
+      left: 60%;
+      top: 50%;
+      transform: translateY(-50%);
+      max-width: 190px;
+      white-space: normal;
+      line-height: 1.3;
+      box-shadow: 0 10px 25px rgba(255, 77, 109, 0.22);
+      z-index: 9999;
+    }
 
-/* HEARTS */
-.heart {
-  position:fixed;
-  bottom:-20px;
-  font-size:20px;
-  animation:rise 4s linear forwards;
-}
+    #yesMessage {
+      display: none;
+      position: relative;
+      z-index: 1001;
+    }
 
-@keyframes rise {
-  from { transform:translateY(0); }
-  to { transform:translateY(-100vh); opacity:0; }
-}
+    .popup-photo {
+      position: fixed;
+      width: 260px;
+      height: 260px;
+      object-fit: cover;
+      border-radius: 28px;
+      border: 5px solid white;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+      z-index: 3000;
+      transform: rotate(-5deg);
+      animation: pop 0.25s ease;
+      pointer-events: none;
+    }
 
-/* MOBILE */
-@media(max-width:480px){
-  .popup-photo{ width:180px;height:180px; }
-  .final-photo{ width:100px;height:100px; }
-}
-</style>
+    .final-photo {
+      position: fixed;
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 24px;
+      border: 4px solid white;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.3);
+      z-index: 3000;
+      animation: pop 0.3s ease;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+    }
+
+    .heart {
+      position: fixed;
+      bottom: -20px;
+      font-size: 20px;
+      animation: rise 4s linear forwards;
+      z-index: 2500;
+      pointer-events: none;
+    }
+
+    @keyframes pop {
+      from {
+        transform: scale(0.6) rotate(-5deg);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1) rotate(-5deg);
+        opacity: 1;
+      }
+    }
+
+    @keyframes rise {
+      from {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateY(-100vh);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 24px 18px;
+      }
+
+      h1 {
+        font-size: 1.7rem;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+      }
+
+      .yes {
+        left: 10%;
+        max-width: 150px;
+        font-size: 14px;
+      }
+
+      .no {
+        left: 48%;
+        max-width: 150px;
+        font-size: 14px;
+      }
+
+      .popup-photo {
+        width: 180px;
+        height: 180px;
+      }
+
+      .final-photo {
+        width: 100px;
+        height: 100px;
+      }
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="card">
+  <div class="card">
+    <div id="questionBox">
+      <h1>I think there’s something between us… 💖</h1>
+      <p>
+        I don’t know where this will go,<br>
+        but I know I enjoy being around you… ❤️
+      </p>
 
-<div id="questionBox">
-<h1>I think there’s something between us… 💖</h1>
-<p>
-I don’t know where this will go,<br>
-but I know I enjoy being around you… ❤️
-</p>
+      <div class="buttons" id="buttons">
+        <button class="yes" id="yesBtn" onclick="sayYes()">Let’s see where this goes 💘</button>
+        <button class="no" id="noBtn" type="button">Just friends? 🥺</button>
+      </div>
+    </div>
 
-<div class="buttons" id="buttons">
-<button class="yes" id="yesBtn" onclick="sayYes()">Let’s see where this goes 💘</button>
-<button class="no" id="noBtn">Just friends? 🥺</button>
-</div>
-</div>
+    <div id="yesMessage">
+      <h2>That made me smile ❤️</h2>
+      <p>
+        I know things got a little confusing between us,<br>
+        but I still feel something…<br>
+        and I’d like to understand it better 💖
+      </p>
 
-<div id="yesMessage">
-<h2>That made me smile ❤️</h2>
+      <p>
+        No pressure, no expectations…<br>
+        just something real, at our own pace ❤️
+      </p>
+    </div>
+  </div>
 
-<p>
-I know things got a little confusing between us,<br>
-but I still feel something…<br>
-and I’d like to understand it better 💖
-</p>
+  <script>
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const buttons = document.getElementById("buttons");
 
-<p>
-No pressure, no expectations…<br>
-just something real, at our own pace ❤️
-</p>
-</div>
+    const texts = [
+      "Just friends? 🥺",
+      "Are you sure? 💔",
+      "Maybe… not yet? 🥺",
+      "Think again? 💖",
+      "Hmm… really? 😅",
+      "That doesn’t feel right 😌",
+      "You might regret this 😏",
+      "Something feels different though… 🥺",
+      "It didn’t feel like just friends… 💭",
+      "I felt something… didn’t you? 💖",
+      "Maybe we just need time… ⏳",
+      "Let’s not rush the answer 🥺",
+      "I’m not giving up that easily 😌"
+    ];
 
-</div>
+    const photos = [
+      "photo1.jpg",
+      "photo2.jpg",
+      "photo3.jpg",
+      "photo4.jpg",
+      "photo5.jpg",
+      "photo6.jpg",
+      "photo7.jpg",
+      "photo8.jpg",
+      "photo9.jpg"
+    ];
 
-<script>
-const noBtn = document.getElementById("noBtn");
-const yesBtn = document.getElementById("yesBtn");
-const buttons = document.getElementById("buttons");
+    let index = 0;
+    let scale = 1;
 
-/* FULL TEXT FLOW */
-const texts = [
-"Just friends? 🥺",
+    noBtn.addEventListener("mouseover", move);
+    noBtn.addEventListener("click", move);
+    noBtn.addEventListener("touchstart", move, { passive: false });
 
-"Are you sure? 💔",
-"Maybe… not yet? 🥺",
-"Think again? 💖",
+    function move(e) {
+      if (e) e.preventDefault();
 
-"Hmm… really? 😅",
-"That doesn’t feel right 😌",
-"You might regret this 😏",
+      const maxX = Math.max(0, buttons.clientWidth - noBtn.offsetWidth);
+      const maxY = Math.max(0, buttons.clientHeight - noBtn.offsetHeight);
 
-"Something feels different though… 🥺",
-"It didn’t feel like just friends… 💭",
+      noBtn.style.left = Math.random() * maxX + "px";
+      noBtn.style.top = Math.random() * maxY + "px";
 
-"I felt something… didn’t you? 💖",
-"Maybe we just need time… ⏳",
-"Let’s not rush the answer 🥺",
-"I’m not giving up that easily 😌"
-];
+      index = (index + 1) % texts.length;
+      noBtn.innerText = texts[index];
 
-const photos = [
-"photo1.jpg","photo2.jpg","photo3.jpg",
-"photo4.jpg","photo5.jpg","photo6.jpg",
-"photo7.jpg","photo8.jpg","photo9.jpg"
-];
+      scale += 0.15;
+      yesBtn.style.transform = "translateY(-50%) scale(" + scale + ")";
 
-let index = 0;
-let scale = 1;
+      const photo = photos[Math.floor(Math.random() * photos.length)];
+      const img = document.createElement("img");
+      img.src = photo;
+      img.className = "popup-photo";
 
-noBtn.addEventListener("mouseover", move);
-noBtn.addEventListener("click", move);
+      const photoWidth = window.innerWidth <= 480 ? 180 : 260;
+      const photoHeight = window.innerWidth <= 480 ? 180 : 260;
 
-function move(e){
-  if(e) e.preventDefault();
+      const safeWidth = window.innerWidth <= 480 ? 260 : 430;
+      const safeHeight = window.innerWidth <= 480 ? 260 : 320;
 
-  const maxX = buttons.clientWidth - noBtn.offsetWidth;
-  const maxY = buttons.clientHeight - noBtn.offsetHeight;
+      let x, y;
 
-  noBtn.style.left = Math.random()*maxX + "px";
-  noBtn.style.top = Math.random()*maxY + "px";
+      do {
+        x = Math.random() * Math.max(0, window.innerWidth - photoWidth);
+        y = Math.random() * Math.max(0, window.innerHeight - photoHeight);
+      } while (
+        x > (window.innerWidth / 2 - safeWidth / 2) &&
+        x < (window.innerWidth / 2 + safeWidth / 2) &&
+        y > (window.innerHeight / 2 - safeHeight / 2) &&
+        y < (window.innerHeight / 2 + safeHeight / 2)
+      );
 
-  /* smoother text change */
-  if(Math.random() > 0.3){
-    index = (index+1)%texts.length;
-    noBtn.innerText = texts[index];
-  }
+      img.style.left = x + "px";
+      img.style.top = y + "px";
 
-  scale += 0.15;
-  yesBtn.style.transform = "translateY(-50%) scale("+scale+")";
+      document.body.appendChild(img);
 
-  /* RANDOM PHOTO */
-  const photo = photos[Math.floor(Math.random()*photos.length)];
+      setTimeout(() => {
+        img.remove();
+      }, 6000);
+    }
 
-  const img = document.createElement("img");
-  img.src = photo;
-  img.className = "popup-photo";
+    function sayYes() {
+      document.getElementById("questionBox").style.display = "none";
+      document.getElementById("yesMessage").style.display = "block";
 
-  const maxLeft = window.innerWidth - 260;
-  const maxTop = window.innerHeight - 260;
+      showHeartPhotos();
 
-  img.style.left = Math.random()*maxLeft + "px";
-  img.style.top = Math.random()*maxTop + "px";
+      for (let i = 0; i < 30; i++) {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerHTML = ["❤️", "💖", "💕", "💘"][Math.floor(Math.random() * 4)];
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.fontSize = (20 + Math.random() * 18) + "px";
+        document.body.appendChild(heart);
 
-  document.body.appendChild(img);
+        setTimeout(() => heart.remove(), 4000);
+      }
+    }
 
-  setTimeout(()=> img.remove(),6000);
-}
+    function showHeartPhotos() {
+      const positions = window.innerWidth <= 480
+        ? [
+            [8, 12], [8, 88],
+            [22, 8], [22, 28], [22, 72], [22, 92],
+            [40, 8], [40, 92],
+            [78, 50]
+          ]
+        : [
+            [8, 12], [8, 88],
+            [22, 8], [22, 25], [22, 75], [22, 92],
+            [42, 10], [42, 90],
+            [80, 50]
+          ];
 
-function sayYes(){
-  document.getElementById("questionBox").style.display="none";
-  document.getElementById("yesMessage").style.display="block";
+      photos.forEach((p, i) => {
+        const img = document.createElement("img");
+        img.src = p;
+        img.className = "final-photo";
 
-  showHeartPhotos();
+        if (positions[i]) {
+          img.style.top = positions[i][0] + "%";
+          img.style.left = positions[i][1] + "%";
+        }
 
-  for(let i=0;i<30;i++){
-    const heart=document.createElement("div");
-    heart.className="heart";
-    heart.innerHTML=["❤️","💖","💕","💘"][Math.floor(Math.random()*4)];
-    heart.style.left=Math.random()*100+"vw";
-    document.body.appendChild(heart);
-    setTimeout(()=>heart.remove(),4000);
-  }
-}
-
-function showHeartPhotos(){
-  const positions = [
-    [5,15],[5,35],[5,55],[5,75],
-    [20,5],[20,25],[20,65],[20,85],
-    [40,45]
-  ];
-
-  photos.forEach((p,i)=>{
-    const img=document.createElement("img");
-    img.src=p;
-    img.className="final-photo";
-
-    img.style.top = positions[i][0]+"%";
-    img.style.left = positions[i][1]+"%";
-
-    document.body.appendChild(img);
-  });
-}
-</script>
-
+        document.body.appendChild(img);
+      });
+    }
+  </script>
 </body>
 </html>
