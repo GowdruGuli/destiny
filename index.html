@@ -143,16 +143,6 @@
       pointer-events: none;
     }
 
-    .music-note {
-      position: fixed;
-      font-size: 22px;
-      color: #c2185b;
-      z-index: 2600;
-      pointer-events: none;
-      animation: noteRise 3s ease-out forwards;
-      opacity: 0.9;
-    }
-
     .music-btn {
       position: fixed;
       right: 18px;
@@ -162,9 +152,9 @@
       padding: 12px 16px;
       font-size: 14px;
       font-weight: 700;
-      background: rgba(255,255,255,0.92);
+      background: rgba(255, 255, 255, 0.95);
       color: #7a2048;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
       z-index: 12000;
       cursor: pointer;
       display: none;
@@ -199,20 +189,6 @@
       }
       to {
         transform: translateY(-100vh);
-        opacity: 0;
-      }
-    }
-
-    @keyframes noteRise {
-      0% {
-        transform: translateY(0) scale(0.8);
-        opacity: 0;
-      }
-      20% {
-        opacity: 0.95;
-      }
-      100% {
-        transform: translateY(-120px) scale(1.15);
         opacity: 0;
       }
     }
@@ -292,11 +268,10 @@
     </div>
   </div>
 
-  <button id="musicBtn" class="music-btn" type="button">🎵 Pause music</button>
+  <button id="musicBtn" class="music-btn" type="button">🎵 Play music</button>
 
-  <!-- Put your Kannada song file in the same folder and name it exactly song.mp3 -->
-  <audio id="bgMusic" loop>
-    <source src="song.mp3" type="audio/mpeg" />
+  <audio id="bgMusic" loop preload="auto">
+    <source src="./song.mp3" type="audio/mpeg" />
   </audio>
 
   <script>
@@ -336,13 +311,24 @@
 
     let index = 0;
     let scale = 1;
-    let noteInterval = null;
 
     noBtn.addEventListener("mouseover", move);
     noBtn.addEventListener("click", move);
     noBtn.addEventListener("touchstart", move, { passive: false });
 
-    musicBtn.addEventListener("click", toggleMusic);
+    musicBtn.addEventListener("click", async function () {
+      try {
+        if (music.paused) {
+          await music.play();
+          musicBtn.textContent = "🎵 Pause music";
+        } else {
+          music.pause();
+          musicBtn.textContent = "🎵 Play music";
+        }
+      } catch (err) {
+        console.log("Music error:", err);
+      }
+    });
 
     function move(e) {
       if (e) e.preventDefault();
@@ -392,13 +378,22 @@
       }, 6000);
     }
 
-    function sayYes() {
+    async function sayYes() {
       document.getElementById("questionBox").style.display = "none";
       document.getElementById("yesMessage").style.display = "block";
 
       showHeartPhotos();
       startHearts();
-      startMusic();
+
+      musicBtn.style.display = "block";
+
+      try {
+        await music.play();
+        musicBtn.textContent = "🎵 Pause music";
+      } catch (err) {
+        console.log("Autoplay blocked:", err);
+        musicBtn.textContent = "🎵 Play music";
+      }
     }
 
     function showHeartPhotos() {
@@ -446,61 +441,6 @@
 
         setTimeout(() => heart.remove(), 4000);
       }
-    }
-
-    function startMusic() {
-      const playPromise = music.play();
-
-      if (playPromise !== undefined) {
-        playPromise.then(() => {
-          musicBtn.style.display = "block";
-          musicBtn.textContent = "🎵 Pause music";
-          startMusicNotes();
-        }).catch(() => {
-          musicBtn.style.display = "block";
-          musicBtn.textContent = "🎵 Play music";
-        });
-      }
-    }
-
-    function toggleMusic() {
-      if (music.paused) {
-        music.play().then(() => {
-          musicBtn.textContent = "🎵 Pause music";
-          startMusicNotes();
-        }).catch(() => {
-          musicBtn.textContent = "🎵 Play music";
-        });
-      } else {
-        music.pause();
-        musicBtn.textContent = "🎵 Play music";
-        stopMusicNotes();
-      }
-    }
-
-    function startMusicNotes() {
-      stopMusicNotes();
-      noteInterval = setInterval(createMusicNote, 700);
-    }
-
-    function stopMusicNotes() {
-      if (noteInterval) {
-        clearInterval(noteInterval);
-        noteInterval = null;
-      }
-    }
-
-    function createMusicNote() {
-      if (music.paused) return;
-
-      const note = document.createElement("div");
-      note.className = "music-note";
-      note.innerHTML = ["🎵", "🎶", "♪"][Math.floor(Math.random() * 3)];
-      note.style.left = (70 + Math.random() * 20) + "vw";
-      note.style.bottom = (20 + Math.random() * 20) + "px";
-      document.body.appendChild(note);
-
-      setTimeout(() => note.remove(), 3000);
     }
   </script>
 </body>
